@@ -1697,4 +1697,10 @@
   //#define FILAMENT_LCD_DISPLAY
 #endif
 
+/**
+ * Test Setup Configuration
+ *
+ */
+#define TEST_SETUP
+
 #endif // CONFIGURATION_H
