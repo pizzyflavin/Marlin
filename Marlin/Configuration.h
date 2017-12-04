@@ -526,15 +526,17 @@
  *                                      X, Y, Z, E0 [, E1[, E2[, E3[, E4]]]]
  */
 // 200 steps/rev * 0.08333 uL/rev
-//#define STEPS_UL                      (16.6666666666666667)
-#define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 80, 200 }
+#define E_MICROSTEPS                  (16)
+#define STEPS_PER_UL                  (16.6666666666666667)
+#define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 80, (STEPS_PER_UL * E_MICROSTEPS) }
 
-/**
+/*
  * Default Max Feed Rate (mm/s)
  * Override with M203
  *                                      X, Y, Z, E0 [, E1[, E2[, E3[, E4]]]]
  */
-#define DEFAULT_MAX_FEEDRATE          { 150, 150, 150, 2 }
+// MAX for E is 120 rpm, or 24 uL/s
+#define DEFAULT_MAX_FEEDRATE          { 150, 150, 150, 24 }
 
 /**
  * Default Max Acceleration (change/s) change = mm/s
