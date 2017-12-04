@@ -80,12 +80,12 @@
     // points to MXT1
     #define X_STEP_PIN         22
     #define X_DIR_PIN          32
-    #define X_ENABLE_PIN       44
+    #define X_ENABLE_PIN       29 // Still points to X_EN
 
     // points to MXT2
     #define Y_STEP_PIN         23
     #define Y_DIR_PIN          31
-    #define Y_ENABLE_PIN       45
+    #define Y_ENABLE_PIN       28 // Still points to Y_EN
 
     // Unchanged
     #define Z_STEP_PIN         35
