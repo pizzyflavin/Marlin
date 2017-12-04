@@ -76,25 +76,62 @@
 //
 // Steppers
 //
-#define X_STEP_PIN         37
-#define X_DIR_PIN          48
-#define X_ENABLE_PIN       29
+#if ENABLED(TEST_SETUP)
+    // points to MXT1
+    #define X_STEP_PIN         22
+    #define X_DIR_PIN          32
+    #define X_ENABLE_PIN       29 // Still points to X_EN
 
-#define Y_STEP_PIN         36
-#define Y_DIR_PIN          49
-#define Y_ENABLE_PIN       28
+    // points to MXT2
+    #define Y_STEP_PIN         23
+    #define Y_DIR_PIN          31
+    #define Y_ENABLE_PIN       28 // Still points to Y_EN
 
-#define Z_STEP_PIN         35
-#define Z_DIR_PIN          47
-#define Z_ENABLE_PIN       27
+    // Unchanged
+    #define Z_STEP_PIN         35
+    #define Z_DIR_PIN          47
+    #define Z_ENABLE_PIN       27
 
-#define E0_STEP_PIN        34
-#define E0_DIR_PIN         43
-#define E0_ENABLE_PIN      26
+    // Unchanged
+    #define E0_STEP_PIN        34
+    #define E0_DIR_PIN         43
+    #define E0_ENABLE_PIN      26
 
-#define E1_STEP_PIN        33
-#define E1_DIR_PIN         42
-#define E1_ENABLE_PIN      25
+    // Unchanged
+    #define E1_STEP_PIN        33
+    #define E1_DIR_PIN         42
+    #define E1_ENABLE_PIN      25
+
+    // E2 points to X driver
+    #define E2_STEP_PIN        37
+    #define E2_DIR_PIN         48
+    #define E2_ENABLE_PIN      29
+
+    // E3 pots to Y driver
+    #define E3_STEP_PIN        36
+    #define E3_DIR_PIN         49
+    #define E3_ENABLE_PIN      28
+#else // Else use regular pin mapping
+    #define X_STEP_PIN         37
+    #define X_DIR_PIN          48
+    #define X_ENABLE_PIN       29
+
+    #define Y_STEP_PIN         36
+    #define Y_DIR_PIN          49
+    #define Y_ENABLE_PIN       28
+
+    #define Z_STEP_PIN         35
+    #define Z_DIR_PIN          47
+    #define Z_ENABLE_PIN       27
+
+    #define E0_STEP_PIN        34
+    #define E0_DIR_PIN         43
+    #define E0_ENABLE_PIN      26
+
+    #define E1_STEP_PIN        33
+    #define E1_DIR_PIN         42
+    #define E1_ENABLE_PIN      25
+#endif
 
 // Microstepping pins - Mapping not from fastio.h (?)
 #define X_MS1_PIN          40

@@ -119,7 +119,7 @@
 // The following define selects which electronics board you have.
 // Please choose the name from boards.h that matches your setup
 #ifndef MOTHERBOARD
-  #define MOTHERBOARD BOARD_RAMPS_14_EFB
+  #define MOTHERBOARD BOARD_RAMBO
 #endif
 
 // Optional custom name for your RepStrap or other custom machine
@@ -199,11 +199,11 @@
  *   - This implementation supports only a single extruder.
  *   - Enable DIRECT_MIXING_IN_G1 for Pia Taubert's reference implementation
  */
-//#define MIXING_EXTRUDER
+#define MIXING_EXTRUDER
 #if ENABLED(MIXING_EXTRUDER)
-  #define MIXING_STEPPERS 2        // Number of steppers in your mixing extruder
+  #define MIXING_STEPPERS 4        // Number of steppers in your mixing extruder
   #define MIXING_VIRTUAL_TOOLS 16  // Use the Virtual Tool method with M163 and M164
-  //#define DIRECT_MIXING_IN_G1    // Allow ABCDHI mix factors in G1 movement commands
+  #define DIRECT_MIXING_IN_G1    // Allow ABCDHI mix factors in G1 movement commands
 #endif
 
 // Offset of the extruders (uncomment if using more than one and relying on firmware to position when changing).
@@ -415,7 +415,7 @@
 // It also enables the M302 command to set the minimum extrusion temperature
 // or to allow moving the extruder regardless of the hotend temperature.
 // *** IT IS HIGHLY RECOMMENDED TO LEAVE THIS OPTION ENABLED! ***
-#define PREVENT_COLD_EXTRUSION
+//#define PREVENT_COLD_EXTRUSION
 #define EXTRUDE_MINTEMP 170
 
 // This option prevents a single extrusion longer than EXTRUDE_MAXLENGTH.
@@ -525,14 +525,18 @@
  * Override with M92
  *                                      X, Y, Z, E0 [, E1[, E2[, E3[, E4]]]]
  */
-#define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 4000, 500 }
+// 200 steps/rev * 0.08333 uL/rev
+#define E_MICROSTEPS                  (16)
+#define STEPS_PER_UL                  (16.6666666666666667)
+#define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 80, (STEPS_PER_UL * E_MICROSTEPS) }
 
-/**
+/*
  * Default Max Feed Rate (mm/s)
  * Override with M203
  *                                      X, Y, Z, E0 [, E1[, E2[, E3[, E4]]]]
  */
-#define DEFAULT_MAX_FEEDRATE          { 300, 300, 5, 25 }
+// MAX for E is 120 rpm, or 24 uL/s
+#define DEFAULT_MAX_FEEDRATE          { 150, 150, 150, 24 }
 
 /**
  * Default Max Acceleration (change/s) change = mm/s
@@ -786,9 +790,9 @@
 #define Z_MAX_POS 200
 
 // If enabled, axes won't move below MIN_POS in response to movement commands.
-#define MIN_SOFTWARE_ENDSTOPS
+//#define MIN_SOFTWARE_ENDSTOPS
 // If enabled, axes won't move above MAX_POS in response to movement commands.
-#define MAX_SOFTWARE_ENDSTOPS
+// define MAX_SOFTWARE_ENDSTOPS
 
 /**
  * Filament Runout Sensor
@@ -1588,7 +1592,7 @@
  * Adds the M150 command to set the LED (or LED strip) color.
  * If pins are PWM capable (e.g., 4, 5, 6, 11) then a range of
  * luminance values can be set from 0 to 255.
- * For Neopixel LED overall brightness parameters is also available 
+ * For Neopixel LED overall brightness parameters is also available
  *
  * *** CAUTION ***
  *  LED Strips require a MOFSET Chip between PWM lines and LEDs,
@@ -1696,5 +1700,11 @@
   // Display filament width on the LCD status line. Status messages will expire after 5 seconds.
   //#define FILAMENT_LCD_DISPLAY
 #endif
+
+/**
+ * Test Setup Configuration
+ *
+ */
+#define TEST_SETUP
 
 #endif // CONFIGURATION_H
