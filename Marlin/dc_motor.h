@@ -10,6 +10,8 @@
 
 #include <avr/io.h>
 
+#include "timers.h"
+
 #ifndef DC_MOTOR_H
 #define DC_MOTOR_H
 
@@ -18,17 +20,18 @@
 //===========================================================================
 
 // Constant Definitions
+#define DC_MOTOR_TIMER                  (3)
 
 // Port Definitions
 #define DC_MOTOR_DIR_PORT               (PORTG)
-#define DC_MOTOR_PWM_PORT               (PORTG)
+#define DC_MOTOR_PWM_PORT               (PORTE)
 #define DC_MOTOR_EN_PORT                (PORTJ)
 #define DC_MOTOR_FLT_PORT               (PORTJ)
 #define DC_MOTOR_CS_PORT                (PORTF)
 
 // DDR Definitions
 #define DC_MOTOR_DIR_DDR                (DDRG)
-#define DC_MOTOR_PWM_DDR                (DDRG)
+#define DC_MOTOR_PWM_DDR                (DDRE)
 #define DC_MOTOR_EN_DDR                 (DDRJ)
 #define DC_MOTOR_FLT_DDR                (DDRJ)
 #define DC_MOTOR_CS_DDR                 (DDRF)
