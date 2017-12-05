@@ -263,6 +263,7 @@
 #include "gcode.h"
 #include "valves.h"
 #include "solenoids.h"
+#include "dc_motor.h"
 
 #if HAS_ABL
   #include "vector_3.h"
@@ -13739,6 +13740,7 @@ void setup() {
 
   valve_init();
   solenoid_init();
+  dc_motor_init();
 }
 
 /**
