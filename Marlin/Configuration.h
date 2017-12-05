@@ -501,6 +501,15 @@
 //#define ENDSTOP_INTERRUPTS_FEATURE
 
 //=============================================================================
+//============================== Test Setup Config ============================
+//=============================================================================
+#define TEST_SETUP
+
+#if ENABLED(TEST_SETUP)
+  #define EXT_VPUMP                 300     // 300 enabled by default, use M-code to change or change here
+#endif
+
+//=============================================================================
 //============================== Movement Settings ============================
 //=============================================================================
 // @section motion
@@ -526,8 +535,15 @@
  *                                      X, Y, Z, E0 [, E1[, E2[, E3[, E4]]]]
  */
 // 200 steps/rev * 0.08333 uL/rev
-#define E_MICROSTEPS                  (16)
-#define STEPS_PER_UL                  (16.6666666666666667)
+#if ENABLED(TEST_SETUP)
+    #define E_MICROSTEPS                  (16)
+    #if EXT_VPUMP == 300
+        #define STEPS_PER_UL              (16.6666666666666667)
+    #elif EXT_VPUMP == 450
+        #define STEPS_PER_UL              (4.0)
+    #endif
+#endif
+
 #define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 80, (STEPS_PER_UL * E_MICROSTEPS) }
 
 /*
@@ -1701,10 +1717,5 @@
   //#define FILAMENT_LCD_DISPLAY
 #endif
 
-/**
- * Test Setup Configuration
- *
- */
-#define TEST_SETUP
 
 #endif // CONFIGURATION_H

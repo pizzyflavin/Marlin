@@ -245,6 +245,7 @@
  * M970 - Set solenoid state "M970 P<solenoid> S<state>"
  * M980 - Set DC Motor state "M980 S<state>"
  * M985 - Set DC Motor duty cycle "M985 S<duty_cycle>"
+ * M990 - Set extrusion pump type "M990 P<pump_type>"
  *
  */
 
@@ -440,6 +441,11 @@ static const char *injected_commands_P = NULL;
 #if ENABLED(TEMPERATURE_UNITS_SUPPORT)
   TempUnit input_temp_units = TEMPUNIT_C;
 #endif
+
+/**
+ * Test Setup Variables
+ */
+static uint16_t ext_pump_type = EXT_VPUMP;
 
 /**
  * Feed rates are often configured with mm/m
@@ -10461,7 +10467,35 @@ inline void gcode_M985() {
     }
 }
 
-
+/* M990; Change (or query) pump type "M990 P<pump type>"
+ *
+ * To query, omit pump, "M990"
+ *
+ * Pump Types
+ * ----------
+ *  P = 300
+ *  P = 450
+ *
+ */
+inline void gcode_M990() {
+    if (parser.seenval('P')) {
+        if (parser.value_int() == 300) {
+            ext_pump_type = 300;
+        }
+        else if (parser.value_int() == 450) {
+            ext_pump_type = 450;
+        }
+        else {
+            SERIAL_PROTOCOLLNPGM("Invalid pump type!");
+        }
+    }
+    else {
+        SERIAL_PROTOCOLPGM("Current pump type: ");
+        SERIAL_PROTOCOLLN(ext_pump_type);
+        SERIAL_PROTOCOLLNPGM();
+    }
+    SERIAL_EOL();
+}
 
 #if ENABLED(SWITCHING_EXTRUDER)
   #if EXTRUDERS > 3
@@ -11880,6 +11914,9 @@ void process_next_command() {
 
       case 985:
         gcode_M985();
+
+      case 990: // M990: Change (or query) pump type
+        gcode_M990();
         break;
     }
     break;
