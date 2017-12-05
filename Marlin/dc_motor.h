@@ -43,7 +43,25 @@
 //===========================================================================
 // Function Prototypes
 //===========================================================================
+/*
+ *  Initialize DC motor control
+ */
+void dc_motor_init(void);
 
+/*
+ *  Enable DC motor
+ */
+void dc_motor_enable(void);
+
+/*
+ *  Disable DC motor
+ */
+void dc_motor_disable(void);
+
+/*
+ *  Set PWM duty cycle
+ */
+void dc_motor_set_pwm(uint8_t duty_cycle);
 
 #endif // SOLENOIDS_H
 
