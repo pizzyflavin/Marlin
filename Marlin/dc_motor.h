@@ -64,7 +64,7 @@ void dc_motor_disable(void);
 /*
  *  Set PWM duty cycle
  */
-void dc_motor_set_pwm(uint8_t duty_cycle);
+void dc_motor_set_pwm_duty(uint8_t duty_cycle);
 
 #endif // SOLENOIDS_H
 

@@ -19,7 +19,7 @@
  */
 void dc_motor_init(void) {
     // Set output levels
-    DC_MOTOR_DIR_PORT &= ~DC_MOTOR_DIR;
+    DC_MOTOR_DIR_PORT |= DC_MOTOR_DIR;
     DC_MOTOR_PWM_PORT &= ~DC_MOTOR_PWM;
     DC_MOTOR_EN_PORT &= ~DC_MOTOR_EN;
 
@@ -53,7 +53,7 @@ void dc_motor_disable(void) {
 /*
  *  Set PWM duty cycle
  */
-void dc_motor_set_pwm(uint8_t duty_cycle) {
+void dc_motor_set_pwm_duty(uint8_t duty_cycle) {
     timer_set_pwm_duty(DC_MOTOR_TIMER, duty_cycle);
 }
 
