@@ -145,8 +145,23 @@ void timer_set_count(uint8_t timer, uint16_t count) {
 
 /*
  *  Set duty cycle (0-100) on specified timer
+ *
+ *  Assume caller gives 0 - 100
  */
 void timer_set_pwm_duty(uint8_t timer, uint8_t duty_cycle) {
-
+    float duty_cycle_frac = 0;
+    uint16_t counts = 0;
+    switch (timer) {
+        case 3:
+            if (duty_cycle == 0) {
+                counts = 0;
+            }
+            else {
+                duty_cycle_frac = (duty_cycle / 100.0);
+                counts = (uint16_t)(ICR3 * duty_cycle_frac);
+            }
+            OCR3A = counts;
+            break;
+    }
 }
 
