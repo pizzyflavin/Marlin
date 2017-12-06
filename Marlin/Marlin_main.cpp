@@ -240,8 +240,10 @@
  * T0-T3 - Select an extruder (tool) by index: "T<n> F<units/min>"
  *
  * ************ Test Setup Codes
- * M960 - Set valve state "M960 P<valve> S<state>
- * M970 - Set solenoid state "M970 P<solenoid> S<state>
+ * M960 - Set valve state "M960 P<valve> S<state>"
+ * M970 - Set solenoid state "M970 P<solenoid> S<state>"
+ * M980 - Set DC Motor state "M980 S<state>"
+ * M985 - Set DC Motor duty cycle "M985 S<duty_cycle>"
  *
  */
 
@@ -10384,6 +10386,36 @@ inline void gcode_M970() {
     }
 }
 
+/**
+ * M980: Enable/Disable DC Motor state "M980 S<state>
+ *
+ * State = 0 -> Disabled
+ * State = 1 -> Enabled
+ *
+ */
+inline void gcode_M980() {
+    // Get state
+    uint8_t state = 0;
+    if (parser.seenval('S')) {
+        state = parser.value_bool();
+    }
+    else {
+        SERIAL_PROTOCOLLNPGM("Please specify a state S");
+        SERIAL_EOL();
+        return;
+    }
+
+    // Determine state
+    if (state == 0) {
+        dc_motor_disable();
+    }
+    else { // any non-zero number is ok
+        dc_motor_enable();
+    }
+}
+
+
+
 #if ENABLED(SWITCHING_EXTRUDER)
   #if EXTRUDERS > 3
     #define REQ_ANGLES 4
@@ -11789,6 +11821,10 @@ void process_next_command() {
 
       case 970: // M970: Set solenoid state
         gcode_M970();
+        break;
+
+      case 980: // M980: Enable/Disable DC Motor
+        gcode_M980();
         break;
     }
     break;
