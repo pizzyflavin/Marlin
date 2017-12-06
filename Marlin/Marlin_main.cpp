@@ -240,6 +240,7 @@
  * T0-T3 - Select an extruder (tool) by index: "T<n> F<units/min>"
  *
  * ************ Test Setup Codes
+ * M950 - Set Relay 24V Supply State "M950 S<state>"
  * M960 - Set valve state "M960 P<valve> S<state>"
  * M970 - Set solenoid state "M970 P<solenoid> S<state>"
  * M980 - Set DC Motor state "M980 S<state>"
@@ -10291,6 +10292,32 @@ inline void gcode_M999() {
 }
 
 /**
+ * M950: Enable/Disable 24V for relays "M950 S<state>"
+ *
+ * State = 0 -> 0V
+ * State = 1 -> 24V
+ *
+ */
+inline void gcode_M950() {
+    uint8_t state = 0;
+    // Get state
+    if (parser.seenval('S')) {
+        state = parser.value_bool();
+    }
+    else {
+        SERIAL_PROTOCOLLNPGM("Please specify a state S");
+        SERIAL_EOL();
+        return;
+    }
+
+    if (state == 0) {
+        PORTE &= ~ (1 << 5);
+    } else {
+        PORTE |= (1 << 5);
+    }
+}
+
+/**
  * M960: Set valve state "M960 P<valve> S<state>"
  *
  * Valves start at 1.
@@ -10411,6 +10438,26 @@ inline void gcode_M980() {
     }
     else { // any non-zero number is ok
         dc_motor_enable();
+    }
+}
+
+inline void gcode_M985() {
+    uint8_t duty = 0;
+    if (parser.seenval('S')) {
+        duty = parser.value_byte();
+    }
+    else {
+        SERIAL_PROTOCOLLNPGM("Please specify a duty cycle S");
+        SERIAL_EOL();
+        return;
+    }
+    if ((duty >= 0) && (duty <= 100)) {
+        dc_motor_set_pwm_duty(duty);
+    }
+    else {
+        SERIAL_PROTOCOLLNPGM("Please specify a duty cycle between 0 and 100.");
+        SERIAL_EOL();
+        return;
     }
 }
 
@@ -11815,6 +11862,10 @@ void process_next_command() {
 
       // Test Setup M-Codes
 
+      case 950: // M950: Enable/Disable 24V for relays
+        gcode_M950();
+        break;
+
       case 960: // M960: Set valve state
         gcode_M960();
         break;
@@ -11825,6 +11876,10 @@ void process_next_command() {
 
       case 980: // M980: Enable/Disable DC Motor
         gcode_M980();
+        break;
+
+      case 985:
+        gcode_M985();
         break;
     }
     break;
