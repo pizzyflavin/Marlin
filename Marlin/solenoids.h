@@ -8,8 +8,8 @@
  ***************************************************************************/
 #include <avr/io.h>
 
-#ifndef SOLENOIDS_H_
-#define SOLENOIDS_H_
+#ifndef SOLENOIDS_H
+#define SOLENOIDS_H
 
 //===========================================================================
 // Pin Definitions
