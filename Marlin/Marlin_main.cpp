@@ -10473,20 +10473,34 @@ inline void gcode_M985() {
  *
  * Pump Types
  * ----------
- *  P = 300
- *  P = 450
+ * 1 - PUMP_12 (300)
+ * 2 - PUMP_50 (450)
+ * 3 - PUMP_50_GEARED (450)
+ * 4 - PUMP_140 (600)
  *
  */
 inline void gcode_M990() {
     if (parser.seenval('P')) {
-        if (parser.value_int() == 300) {
-            ext_pump_type = 300;
-        }
-        else if (parser.value_int() == 450) {
-            ext_pump_type = 450;
-        }
-        else {
-            SERIAL_PROTOCOLLNPGM("Invalid pump type!");
+        switch (parser.value_byte()) {
+            case PUMP_12:
+                ext_pump_type = PUMP_12
+                // Set steps per uL
+                break;
+            case PUMP_50:
+                ext_pump_type = PUMP_50
+                // Set steps per uL
+                break;
+            case PUMP_50_GEARED:
+                ext_pump_type = PUMP_50_GEARED
+                // Set steps per uL
+                break;
+            case PUMP_140:
+                ext_pump_type = PUMP_140
+                // Set steps per uL
+                break;
+            default:
+                SERIAL_PROTOCOLLNPGM("Invalid pump type!");
+                break;
         }
     }
     else {
