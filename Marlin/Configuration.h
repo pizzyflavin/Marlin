@@ -506,7 +506,20 @@
 #define TEST_SETUP
 
 #if ENABLED(TEST_SETUP)
-  #define EXT_VPUMP                 300     // 300 enabled by default, use M-code to change or change here
+  // Pump Type Definitions
+  #define PUMP_12                   (1)
+  #define PUMP_50                   (2)
+  #define PUMP_50_GEARED            (3)
+  #define PUMP_140                  (4)
+
+  // Pump Steps Per Unit
+  #define PUMP_12_STEPS_UL          (16.6666666666667)
+  #define PUMP_50_STEPS_UL          (4.0)
+  #define PUMP_50_GEARED_STEPS_UL   (48.0)
+  #define PUMP_140_STEPS_UL         (1.42857142857142)
+
+  // External Pump
+  #define EXT_VPUMP                 PUMP_12
 #endif
 
 //=============================================================================
@@ -534,17 +547,27 @@
  * Override with M92
  *                                      X, Y, Z, E0 [, E1[, E2[, E3[, E4]]]]
  */
-// 200 steps/rev * 0.08333 uL/rev
-#if ENABLED(TEST_SETUP)
-    #define E_MICROSTEPS                  (16)
-    #if EXT_VPUMP == 300
-        #define STEPS_PER_UL              (16.6666666666666667)
-    #elif EXT_VPUMP == 450
-        #define STEPS_PER_UL              (4.0)
-    #endif
-#endif
 
-#define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 80, (STEPS_PER_UL * E_MICROSTEPS) }
+#if ENABLED(TEST_SETUP)
+  // Microstepping setting for all motor drives connected to extrusion pumps
+  #define E_MICROSTEPS
+
+  // Steps/unit based on pump selection
+  #if EXT_VPUMP == PUMP_12
+    #define E_STEPS_PER_UL          PUMP_12_STEPS_UL
+  #elif EXT_VPUMP == PUMP_50
+    #define E_STEPS_PER_UL          PUMP_50_STEPS_UL
+  #elif EXT_VPUMP == PUMP_50_GEARED
+    #define E_STEPS_PER_UL          PUMP_50_GEARED_STEPS_UL
+  #elif EXT_VPUMP == PUMP_140
+    #define E_STEPS_PER_UL          PUJMP_140_STEPS_UL
+  #endif // EXT_VPUMP
+
+  // Default steps per unit with test setup
+  #define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 80, (STEPS_PER_UL * E_MICROSTEPS) }
+#else
+  #define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 80, 80 }
+#endif // TEST_SETUP
 
 /*
  * Default Max Feed Rate (mm/s)
