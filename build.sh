@@ -49,6 +49,9 @@ avrdude -p m2560 -b 115200 -c wiring -P ${1:-$PORT}  -D -U flash:w:$target_hex
 mv $target_hex $build_dir/MarlinUsed.ino.hex
 build_dir_check_rm
 
+DATETIME=$(date)
+echo "Script completed at $DATETIME"
+
 function build_dir_check_rm() {
     if [ -d $build_dir ]; then
         rm -r $build_dir
