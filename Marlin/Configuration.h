@@ -519,7 +519,7 @@
   #define PUMP_140_STEPS_UL         (1.42857142857142)
 
   // External Pump
-  #define EXT_VPUMP                 PUMP_12
+  #define EXT_VPUMP                 PUMP_50
 #endif
 
 //=============================================================================
@@ -550,7 +550,7 @@
 
 #if ENABLED(TEST_SETUP)
   // Microstepping setting for all motor drives connected to extrusion pumps
-  #define E_MICROSTEPS
+  #define E_MICROSTEPS              (16)
 
   // Steps/unit based on pump selection
   #if EXT_VPUMP == PUMP_12
@@ -560,11 +560,11 @@
   #elif EXT_VPUMP == PUMP_50_GEARED
     #define E_STEPS_PER_UL          PUMP_50_GEARED_STEPS_UL
   #elif EXT_VPUMP == PUMP_140
-    #define E_STEPS_PER_UL          PUJMP_140_STEPS_UL
+    #define E_STEPS_PER_UL          PUMP_140_STEPS_UL
   #endif // EXT_VPUMP
 
   // Default steps per unit with test setup
-  #define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 80, (STEPS_PER_UL * E_MICROSTEPS) }
+  #define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 80, (E_STEPS_PER_UL * E_MICROSTEPS) }
 #else
   #define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 80, 80 }
 #endif // TEST_SETUP
@@ -795,10 +795,10 @@
 // @section extruder
 
 // For direct drive extruder v9 set to true, for geared extruder set to false.
-#define INVERT_E0_DIR false
-#define INVERT_E1_DIR false
-#define INVERT_E2_DIR false
-#define INVERT_E3_DIR false
+#define INVERT_E0_DIR true
+#define INVERT_E1_DIR true
+#define INVERT_E2_DIR true
+#define INVERT_E3_DIR true
 #define INVERT_E4_DIR false
 
 // @section homing
