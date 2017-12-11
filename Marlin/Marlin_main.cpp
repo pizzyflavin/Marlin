@@ -10481,32 +10481,46 @@ inline void gcode_M985() {
  */
 inline void gcode_M990() {
     if (parser.seenval('P')) {
+        float steps_per_unit = parser.value_float();
         switch (parser.value_byte()) {
             case PUMP_12:
-                ext_pump_type = PUMP_12
-                // Set steps per uL
+                ext_pump_type = PUMP_12;
+                steps_per_unit = PUMP_12_STEPS_UL;
                 break;
             case PUMP_50:
-                ext_pump_type = PUMP_50
-                // Set steps per uL
+                ext_pump_type = PUMP_50;
+                steps_per_unit = PUMP_50_STEPS_UL;
                 break;
             case PUMP_50_GEARED:
-                ext_pump_type = PUMP_50_GEARED
-                // Set steps per uL
+                ext_pump_type = PUMP_50_GEARED;
+                steps_per_unit = PUMP_50_GEARED_STEPS_UL;
                 break;
             case PUMP_140:
-                ext_pump_type = PUMP_140
-                // Set steps per uL
+                ext_pump_type = PUMP_140;
+                steps_per_unit = PUMP_140_STEPS_UL;
                 break;
             default:
                 SERIAL_PROTOCOLLNPGM("Invalid pump type!");
+                return;
                 break;
         }
+        float factor = planner.axis_steps_per_mm[E_AXIS + TARGET_EXTRUDER] / (steps_per_unit * E_MICROSTEPS);
+        planner.max_jerk[E_AXIS] *= factor;
+        planner.max_feedrate_mm_s[E_AXIS + TARGET_EXTRUDER] *= factor;
+        planner.max_acceleration_steps_per_s2[E_AXIS + TARGET_EXTRUDER] *= factor;
+        planner.axis_steps_per_mm[E_AXIS] = (steps_per_unit * E_MICROSTEPS);
+        planner.refresh_positioning();
     }
     else {
+        // Display current pump type
         SERIAL_PROTOCOLPGM("Current pump type: ");
         SERIAL_PROTOCOLLN(ext_pump_type);
-        SERIAL_PROTOCOLLNPGM();
+        // Display key for pump numbers
+        SERIAL_PROTOCOLLNPGM("Pump Table:");
+        SERIAL_PROTOCOLLNPGM("1 - PUMP_12 (300)");
+        SERIAL_PROTOCOLLNPGM("2 - PUMP_50 (450)");
+        SERIAL_PROTOCOLLNPGM("3 - PUMP_50_GEARED (450)");
+        SERIAL_PROTOCOLLNPGM("4 - PUMP_140 (600)");
     }
     SERIAL_EOL();
 }
