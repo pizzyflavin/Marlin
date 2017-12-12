@@ -501,6 +501,47 @@
 //#define ENDSTOP_INTERRUPTS_FEATURE
 
 //=============================================================================
+//============================== Test Setup Config ============================
+//=============================================================================
+#define TEST_SETUP
+
+#if ENABLED(TEST_SETUP)
+  // Pump Type Definitions
+  #define PUMP_12                   (1)
+  #define PUMP_50                   (2)
+  #define PUMP_50_GEARED            (3)
+  #define PUMP_140                  (4)
+
+  // Pump Steps Per Unit
+  #define PUMP_12_STEPS_UL          (16.6666666666667)
+  #define PUMP_50_STEPS_UL          (4.0)
+  #define PUMP_50_GEARED_STEPS_UL   (48.0)
+  #define PUMP_140_STEPS_UL         (1.42857142857142)
+
+  /**
+   * Pump max flow rates (uL/s)
+   *
+   * PD Pump stator has max rpm of 120 rpm, or 2 rps. Note, this is not
+   * necessarily motor rpm (i.e. geared 50 uL/rev pump), but the pump stator
+   * rpm.
+   *
+   * Max flow rates are in uL/s that correspond to 120rpm for the selected
+   * pump.
+   *
+   */
+  #define PUMP_12_MAX_FLOW            (24)
+  #define PUMP_50_MAX_FLOW            (100)
+  #define PUMP_50_GEARED_MAX_FLOW     PUMP_50_MAX_FLOW
+  #define PUMP_140_MAX_FLOW           (280)
+
+  // Microstepping setting for all motor drives connected to extrusion pumps
+  #define E_MICROSTEPS              (16)
+
+  // External Pump
+  #define EXT_VPUMP                 PUMP_50
+#endif // TEST_SETUP
+
+//=============================================================================
 //============================== Movement Settings ============================
 //=============================================================================
 // @section motion
@@ -525,18 +566,44 @@
  * Override with M92
  *                                      X, Y, Z, E0 [, E1[, E2[, E3[, E4]]]]
  */
-// 200 steps/rev * 0.08333 uL/rev
-#define E_MICROSTEPS                  (16)
-#define STEPS_PER_UL                  (16.6666666666666667)
-#define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 80, (STEPS_PER_UL * E_MICROSTEPS) }
 
-/*
- * Default Max Feed Rate (mm/s)
- * Override with M203
- *                                      X, Y, Z, E0 [, E1[, E2[, E3[, E4]]]]
- */
-// MAX for E is 120 rpm, or 24 uL/s
-#define DEFAULT_MAX_FEEDRATE          { 150, 150, 150, 24 }
+#if defined(EXT_VPUMP)
+
+  // Steps/unit based on pump selection
+  #if EXT_VPUMP == PUMP_12
+    #define E_STEPS_PER_UL          PUMP_12_STEPS_UL
+    #define E_MAX_FLOW              PUMP_12_MAX_FLOW
+  #elif EXT_VPUMP == PUMP_50
+    #define E_STEPS_PER_UL          PUMP_50_STEPS_UL
+    #define E_MAX_FLOW              PUMP_50_MAX_FLOW
+  #elif EXT_VPUMP == PUMP_50_GEARED
+    #define E_STEPS_PER_UL          PUMP_50_GEARED_STEPS_UL
+    #define E_MAX_FLOW              PUMP_50_GEARED_MAX_FLOW
+  #elif EXT_VPUMP == PUMP_140
+    #define E_STEPS_PER_UL          PUMP_140_STEPS_UL
+    #define E_MAX_FLOW              PUMP_140_MAX_FLOW
+  #endif // EXT_VPUMP
+
+  // Default steps per unit with test setup
+  #define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 80, (E_STEPS_PER_UL * E_MICROSTEPS) }
+  /*
+   * Default Max Feed Rate (mm/s)
+   * Override with M203
+   *                                      X, Y, Z, E0 [, E1[, E2[, E3[, E4]]]]
+   */
+  #define DEFAULT_MAX_FEEDRATE          { 150, 150, 150, E_MAX_FLOW }
+
+// Default Steps/Unit and Feedrate
+#else
+  #define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 500, 4000 }
+  /*
+   * Default Max Feed Rate (mm/s)
+   * Override with M203
+   *                                      X, Y, Z, E0 [, E1[, E2[, E3[, E4]]]]
+   */
+  #define DEFAULT_MAX_FEEDRATE          { 150, 150, 150, 25 }
+#endif // EXT_VPUMP
+
 
 /**
  * Default Max Acceleration (change/s) change = mm/s
@@ -756,10 +823,10 @@
 // @section extruder
 
 // For direct drive extruder v9 set to true, for geared extruder set to false.
-#define INVERT_E0_DIR false
-#define INVERT_E1_DIR false
-#define INVERT_E2_DIR false
-#define INVERT_E3_DIR false
+#define INVERT_E0_DIR true
+#define INVERT_E1_DIR true
+#define INVERT_E2_DIR true
+#define INVERT_E3_DIR true
 #define INVERT_E4_DIR false
 
 // @section homing
@@ -1701,10 +1768,5 @@
   //#define FILAMENT_LCD_DISPLAY
 #endif
 
-/**
- * Test Setup Configuration
- *
- */
-#define TEST_SETUP
 
 #endif // CONFIGURATION_H

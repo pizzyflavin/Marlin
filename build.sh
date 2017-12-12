@@ -9,6 +9,10 @@ build_dir_check_rm() {
     fi
 }
 
+abort() {
+    exit 1
+    build_dir_check_rm
+}
 
 # Check if build dir exists
 build_dir="$HOME/projects/Marlin/build/"
@@ -30,20 +34,23 @@ elif [ -f $used_hex ]; then
     echo "Using old hex file..."
 else
     echo "ERROR: hex file not found!"
-    
-    exit 1
+    abort
 fi
 
 # Get port number
-PORT=$(ls /dev/tty.* | grep -E 'usbmodem[0-9]+')
+PORT=$(ls /dev/tty.* | grep -E "usbmodem[0-9]+")
 
 echo "Port found $PORT"
 
-avrdude -p m2560 -b 115200 -c wiring -P $PORT -D -U flash:w:$target_hex
+avrdude -p m2560 -b 115200 -c wiring -P ${1:-$PORT}  -D -U flash:w:$target_hex
+#avrdude -p m2560 -b 115200 -c wiring -P $PORT -D -U flash:w:$target_hex
 
 # rename hex file back to what it was
 mv $target_hex $build_dir/MarlinUsed.ino.hex
 build_dir_check_rm
+
+DATETIME=$(date)
+echo "Script completed at $DATETIME"
 
 function build_dir_check_rm() {
     if [ -d $build_dir ]; then

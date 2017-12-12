@@ -245,6 +245,7 @@
  * M970 - Set solenoid state "M970 P<solenoid> S<state>"
  * M980 - Set DC Motor state "M980 S<state>"
  * M985 - Set DC Motor duty cycle "M985 S<duty_cycle>"
+ * M990 - Set extrusion pump type "M990 P<pump_type>"
  *
  */
 
@@ -440,6 +441,11 @@ static const char *injected_commands_P = NULL;
 #if ENABLED(TEMPERATURE_UNITS_SUPPORT)
   TempUnit input_temp_units = TEMPUNIT_C;
 #endif
+
+/**
+ * Test Setup Variables
+ */
+static uint16_t ext_pump_type = EXT_VPUMP;
 
 /**
  * Feed rates are often configured with mm/m
@@ -10461,7 +10467,91 @@ inline void gcode_M985() {
     }
 }
 
-
+/* M990; Change (or query) pump type "M990 P<pump type>"
+ *
+ * To query, omit pump, "M990"
+ *
+ * Pump Types
+ * ----------
+ * 1 - PUMP_12 (300)
+ * 2 - PUMP_50 (450)
+ * 3 - PUMP_50_GEARED (450)
+ * 4 - PUMP_140 (600)
+ *
+ */
+inline void gcode_M990() {
+    if (parser.seenval('P')) {
+        float steps_per_unit;
+        float pump_max_flow;
+        switch (parser.value_byte()) {
+            case PUMP_12:
+                ext_pump_type = PUMP_12;
+                steps_per_unit = PUMP_12_STEPS_UL;
+                pump_max_flow = PUMP_12_MAX_FLOW;
+                break;
+            case PUMP_50:
+                ext_pump_type = PUMP_50;
+                steps_per_unit = PUMP_50_STEPS_UL;
+                pump_max_flow = PUMP_50_MAX_FLOW;
+                break;
+            case PUMP_50_GEARED:
+                ext_pump_type = PUMP_50_GEARED;
+                steps_per_unit = PUMP_50_GEARED_STEPS_UL;
+                pump_max_flow = PUMP_50_GEARED_MAX_FLOW;
+                break;
+            case PUMP_140:
+                ext_pump_type = PUMP_140;
+                steps_per_unit = PUMP_140_STEPS_UL;
+                pump_max_flow = PUMP_140_MAX_FLOW;
+                break;
+            default:
+                SERIAL_PROTOCOLLNPGM("Invalid pump type!");
+                return;
+                break;
+        }
+        // Multiply by microstepping to get true steps/unit
+        steps_per_unit *= E_MICROSTEPS;
+        // Calculate scale factor for accel and jerk
+        float factor = planner.axis_steps_per_mm[E_AXIS + TARGET_EXTRUDER] / steps_per_unit;
+        // Directly change max_feed and steps/unit
+        planner.axis_steps_per_mm[E_AXIS + TARGET_EXTRUDER] = steps_per_unit;
+        planner.max_feedrate_mm_s[E_AXIS + TARGET_EXTRUDER] = pump_max_flow;
+        // Apply scale factor
+        planner.max_jerk[E_AXIS] *= factor;
+        planner.max_acceleration_steps_per_s2[E_AXIS + TARGET_EXTRUDER] *= factor;
+        planner.refresh_positioning();
+        SERIAL_PROTOCOLPGM("Changing Pump to ");
+        switch (ext_pump_type) {
+            case PUMP_12:
+                SERIAL_PROTOCOLLNPGM("300");
+                break;
+            case PUMP_50:
+                SERIAL_PROTOCOLLNPGM("450");
+                break;
+            case PUMP_50_GEARED:
+                SERIAL_PROTOCOLLNPGM("450 (Geared)");
+                break;
+            case PUMP_140:
+                SERIAL_PROTOCOLLNPGM("600");
+                break;
+            default:
+                SERIAL_PROTOCOLLNPGM("ERROR: pump type cannot be determined!");
+                break;
+        }
+    }
+    else {
+        // Display current pump type
+        SERIAL_PROTOCOLPGM("Current pump type: ");
+        SERIAL_PROTOCOLLN(ext_pump_type);
+        // Display key for pump numbers
+        SERIAL_PROTOCOLLNPGM("Pump Table:");
+        SERIAL_PROTOCOLLNPGM("1 - PUMP_12 (300)");
+        SERIAL_PROTOCOLLNPGM("2 - PUMP_50 (450)");
+        SERIAL_PROTOCOLLNPGM("3 - PUMP_50_GEARED (450)");
+        SERIAL_PROTOCOLLNPGM("4 - PUMP_140 (600)");
+    }
+    SERIAL_EOL();
+}
 
 #if ENABLED(SWITCHING_EXTRUDER)
   #if EXTRUDERS > 3
@@ -11880,6 +11970,9 @@ void process_next_command() {
 
       case 985:
         gcode_M985();
+
+      case 990: // M990: Change (or query) pump type
+        gcode_M990();
         break;
     }
     break;
