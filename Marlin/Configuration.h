@@ -518,12 +518,28 @@
   #define PUMP_50_GEARED_STEPS_UL   (48.0)
   #define PUMP_140_STEPS_UL         (1.42857142857142)
 
+  /**
+   * Pump max flow rates (uL/s)
+   *
+   * PD Pump stator has max rpm of 120 rpm, or 2 rps. Note, this is not
+   * necessarily motor rpm (i.e. geared 50 uL/rev pump), but the pump stator
+   * rpm.
+   *
+   * Max flow rates are in uL/s that correspond to 120rpm for the selected
+   * pump.
+   *
+   */
+  #define PUMP_12_MAX_FLOW            (24)
+  #define PUMP_50_MAX_FLOW            (100)
+  #define PUMP_50_GEARED_MAX_FLOW     PUMP_50_MAX_FLOW
+  #define PUMP_140_MAX_FLOW           (280)
+
   // Microstepping setting for all motor drives connected to extrusion pumps
   #define E_MICROSTEPS              (16)
 
   // External Pump
   #define EXT_VPUMP                 PUMP_50
-#endif
+#endif // TEST_SETUP
 
 //=============================================================================
 //============================== Movement Settings ============================
@@ -556,27 +572,38 @@
   // Steps/unit based on pump selection
   #if EXT_VPUMP == PUMP_12
     #define E_STEPS_PER_UL          PUMP_12_STEPS_UL
+    #define E_MAX_FLOW              PUMP_12_MAX_FLOW
   #elif EXT_VPUMP == PUMP_50
     #define E_STEPS_PER_UL          PUMP_50_STEPS_UL
+    #define E_MAX_FLOW              PUMP_50_MAX_FLOW
   #elif EXT_VPUMP == PUMP_50_GEARED
     #define E_STEPS_PER_UL          PUMP_50_GEARED_STEPS_UL
+    #define E_MAX_FLOW              PUMP_50_GEARED_MAX_FLOW
   #elif EXT_VPUMP == PUMP_140
     #define E_STEPS_PER_UL          PUMP_140_STEPS_UL
+    #define E_MAX_FLOW              PUMP_140_MAX_FLOW
   #endif // EXT_VPUMP
 
   // Default steps per unit with test setup
   #define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 80, (E_STEPS_PER_UL * E_MICROSTEPS) }
-#else
-  #define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 80, 80 }
-#endif // TEST_SETUP
+  /*
+   * Default Max Feed Rate (mm/s)
+   * Override with M203
+   *                                      X, Y, Z, E0 [, E1[, E2[, E3[, E4]]]]
+   */
+  #define DEFAULT_MAX_FEEDRATE          { 150, 150, 150, E_MAX_FLOW }
 
-/*
- * Default Max Feed Rate (mm/s)
- * Override with M203
- *                                      X, Y, Z, E0 [, E1[, E2[, E3[, E4]]]]
- */
-// MAX for E is 120 rpm, or 24 uL/s
-#define DEFAULT_MAX_FEEDRATE          { 150, 150, 150, 24 }
+// Default Steps/Unit and Feedrate
+#else
+  #define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 500, 4000 }
+  /*
+   * Default Max Feed Rate (mm/s)
+   * Override with M203
+   *                                      X, Y, Z, E0 [, E1[, E2[, E3[, E4]]]]
+   */
+  #define DEFAULT_MAX_FEEDRATE          { 150, 150, 150, 25 }
+#endif // EXT_VPUMP
+
 
 /**
  * Default Max Acceleration (change/s) change = mm/s
