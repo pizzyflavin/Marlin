@@ -10481,34 +10481,44 @@ inline void gcode_M985() {
  */
 inline void gcode_M990() {
     if (parser.seenval('P')) {
-        float steps_per_unit = parser.value_float();
+        float steps_per_unit;
+        float pump_max_flow;
         switch (parser.value_byte()) {
             case PUMP_12:
                 ext_pump_type = PUMP_12;
                 steps_per_unit = PUMP_12_STEPS_UL;
+                pump_max_flow = PUMP_12_MAX_FLOW;
                 break;
             case PUMP_50:
                 ext_pump_type = PUMP_50;
                 steps_per_unit = PUMP_50_STEPS_UL;
+                pump_max_flow = PUMP_50_MAX_FLOW;
                 break;
             case PUMP_50_GEARED:
                 ext_pump_type = PUMP_50_GEARED;
                 steps_per_unit = PUMP_50_GEARED_STEPS_UL;
+                pump_max_flow = PUMP_50_GEARED_MAX_FLOW;
                 break;
             case PUMP_140:
                 ext_pump_type = PUMP_140;
                 steps_per_unit = PUMP_140_STEPS_UL;
+                pump_max_flow = PUMP_140_MAX_FLOW;
                 break;
             default:
                 SERIAL_PROTOCOLLNPGM("Invalid pump type!");
                 return;
                 break;
         }
-        float factor = planner.axis_steps_per_mm[E_AXIS + TARGET_EXTRUDER] / (steps_per_unit * E_MICROSTEPS);
+        // Multiply by microstepping to get true steps/unit
+        steps_per_unit *= E_MICROSTEPS;
+        // Calculate scale factor for accel and jerk
+        float factor = planner.axis_steps_per_mm[E_AXIS + TARGET_EXTRUDER] / steps_per_unit;
+        // Directly change max_feed and steps/unit
+        planner.axis_steps_per_mm[E_AXIS + TARGET_EXTRUDER] = steps_per_unit;
+        planner.max_feedrate_mm_s[E_AXIS + TARGET_EXTRUDER] = pump_max_flow;
+        // Apply scale factor
         planner.max_jerk[E_AXIS] *= factor;
-        planner.max_feedrate_mm_s[E_AXIS + TARGET_EXTRUDER] *= factor;
         planner.max_acceleration_steps_per_s2[E_AXIS + TARGET_EXTRUDER] *= factor;
-        planner.axis_steps_per_mm[E_AXIS] = (steps_per_unit * E_MICROSTEPS);
         planner.refresh_positioning();
     }
     else {
