@@ -357,7 +357,7 @@
 
 // @section machine
 
-#define AXIS_RELATIVE_MODES {false, false, false, false}
+#define AXIS_RELATIVE_MODES {true, true, true, true}
 
 // Allow duplication mode with a basic dual-nozzle extruder
 //#define DUAL_NOZZLE_DUPLICATION_MODE
