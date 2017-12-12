@@ -10520,6 +10520,24 @@ inline void gcode_M990() {
         planner.max_jerk[E_AXIS] *= factor;
         planner.max_acceleration_steps_per_s2[E_AXIS + TARGET_EXTRUDER] *= factor;
         planner.refresh_positioning();
+        SERIAL_PROTOCOLPGM("Changing Pump to ");
+        switch (ext_pump_type) {
+            case PUMP_12:
+                SERIAL_PROTOCOLLNPGM("300");
+                break;
+            case PUMP_50:
+                SERIAL_PROTOCOLLNPGM("450");
+                break;
+            case PUMP_50_GEARED:
+                SERIAL_PROTOCOLLNPGM("450 (Geared)");
+                break;
+            case PUMP_140:
+                SERIAL_PROTOCOLLNPGM("600");
+                break;
+            default:
+                SERIAL_PROTOCOLLNPGM("ERROR: pump type cannot be determined!");
+                break;
+        }
     }
     else {
         // Display current pump type
