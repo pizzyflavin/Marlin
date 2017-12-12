@@ -518,6 +518,9 @@
   #define PUMP_50_GEARED_STEPS_UL   (48.0)
   #define PUMP_140_STEPS_UL         (1.42857142857142)
 
+  // Microstepping setting for all motor drives connected to extrusion pumps
+  #define E_MICROSTEPS              (16)
+
   // External Pump
   #define EXT_VPUMP                 PUMP_50
 #endif
@@ -548,9 +551,7 @@
  *                                      X, Y, Z, E0 [, E1[, E2[, E3[, E4]]]]
  */
 
-#if ENABLED(TEST_SETUP)
-  // Microstepping setting for all motor drives connected to extrusion pumps
-  #define E_MICROSTEPS              (16)
+#if defined(EXT_VPUMP)
 
   // Steps/unit based on pump selection
   #if EXT_VPUMP == PUMP_12
