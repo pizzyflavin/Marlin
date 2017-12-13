@@ -11970,6 +11970,7 @@ void process_next_command() {
 
       case 985:
         gcode_M985();
+        break;
 
       case 990: // M990: Change (or query) pump type
         gcode_M990();
