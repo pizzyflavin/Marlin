@@ -578,10 +578,12 @@
     #define E_MAX_FLOW              PUMP_50_MAX_FLOW
   #elif EXT_VPUMP == PUMP_50_GEARED
     #define E_STEPS_PER_UL          PUMP_50_GEARED_STEPS_UL
-    #define E_MAX_FLOW              PUMP_50_GEARED_MAX_FLOW
+    // temporarily limit 50_geared pump to 24 uL/s
+    #define E_MAX_FLOW              PUMP_12_MAX_FLOW //PUMP_50_GEARED_MAX_FLOW
   #elif EXT_VPUMP == PUMP_140
     #define E_STEPS_PER_UL          PUMP_140_STEPS_UL
-    #define E_MAX_FLOW              PUMP_140_MAX_FLOW
+    // temporarily limit 140 pump to 100 uL/s, driver not strong enough
+    #define E_MAX_FLOW              PUMP_50_MAX_FLOW //PUMP_140_MAX_FLOW
   #endif // EXT_VPUMP
 
   // Default steps per unit with test setup
