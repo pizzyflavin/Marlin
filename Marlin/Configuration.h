@@ -529,10 +529,10 @@
    * pump.
    *
    */
-  #define PUMP_12_MAX_FLOW            (24)
-  #define PUMP_50_MAX_FLOW            (100)
+  #define PUMP_12_MAX_FLOW            (24 * 4)
+  #define PUMP_50_MAX_FLOW            (100 * 4)
   #define PUMP_50_GEARED_MAX_FLOW     PUMP_50_MAX_FLOW
-  #define PUMP_140_MAX_FLOW           (280)
+  #define PUMP_140_MAX_FLOW           (280 * 4)
 
   // Microstepping setting for all motor drives connected to extrusion pumps
   #define E_MICROSTEPS              (4)
