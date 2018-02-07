@@ -535,7 +535,7 @@
   #define PUMP_140_MAX_FLOW           (280)
 
   // Microstepping setting for all motor drives connected to extrusion pumps
-  #define E_MICROSTEPS              (16)
+  #define E_MICROSTEPS              (4)
 
   // External Pump
   #define EXT_VPUMP                 PUMP_50
@@ -578,8 +578,7 @@
     #define E_MAX_FLOW              PUMP_50_MAX_FLOW
   #elif EXT_VPUMP == PUMP_50_GEARED
     #define E_STEPS_PER_UL          PUMP_50_GEARED_STEPS_UL
-    // temporarily limit 50_geared pump to 24 uL/s
-    #define E_MAX_FLOW              PUMP_12_MAX_FLOW //PUMP_50_GEARED_MAX_FLOW
+    #define E_MAX_FLOW              PUMP_50_GEARED_MAX_FLOW
   #elif EXT_VPUMP == PUMP_140
     #define E_STEPS_PER_UL          PUMP_140_STEPS_UL
     // temporarily limit 140 pump to 100 uL/s, driver not strong enough
