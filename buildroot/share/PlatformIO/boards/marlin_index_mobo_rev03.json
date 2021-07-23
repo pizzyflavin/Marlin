@@ -11,7 +11,7 @@
       ],
       [
         "0x0483",
-        "0x3748"
+        "0xdf11"
       ]
     ],
     "mcu": "stm32f407vet6",
@@ -49,10 +49,10 @@
     "disable_flushing": false,
     "maximum_ram_size": 131072,
     "maximum_size": 514288,
-    "protocol": "stlink",
+    "protocol": "dfu",
     "protocols": [
-      "stlink",
       "dfu",
+      "stlink",
       "jlink"
     ],
     "require_upload_port": true,
