@@ -89,9 +89,9 @@
   #define MACHINE_NAME DEFAULT_MACHINE_NAME
 #endif
 
-#ifndef MACHINE_UUID
-  #define MACHINE_UUID DEFAULT_MACHINE_UUID
-#endif
+// #ifndef MACHINE_UUID
+//   #define MACHINE_UUID DEFAULT_MACHINE_UUID
+// #endif
 
 #define MARLIN_WEBSITE_URL "marlinfw.org"
 

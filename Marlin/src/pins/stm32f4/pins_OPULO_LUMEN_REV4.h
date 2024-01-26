@@ -30,7 +30,7 @@
 #include "env_validate.h"
 
 #define BOARD_INFO_NAME      "LumenPnP Motherboard REV04"
-#define DEFAULT_MACHINE_NAME "LumenPnP"
+#define DEFAULT_MACHINE_NAME "LumenPnP REV04"
 
 /**
  * By default, the extra stepper motor configuration is:
@@ -44,6 +44,7 @@
 
 // I2C MCP3426 (16-Bit, 240SPS, dual-channel ADC)
 #define HAS_MCP3426_ADC
+#define HAS_STM32_UID
 
 //
 // Servos
