@@ -448,6 +448,7 @@
 #define BOARD_FYSETC_SPIDER_KING407   5243  // FYSETC Spider King407 (STM32F407ZG)
 #define BOARD_MKS_SKIPR_V1            5244  // MKS SKIPR v1.0 all-in-one board (STM32F407VE)
 #define BOARD_TRONXY_V10              5245  // TRONXY V10 (STM32F446ZE)
+#define BOARD_OPULO_LUMEN_REV5        5246  // Opulo Lumen PnP Controller REV5 (STM32F407VE / STM32F407VG)
 
 //
 // ARM Cortex-M7

@@ -22,7 +22,7 @@
 #pragma once
 
 /**
- * STM32F407VET6 on Opulo Lumen PnP Rev3
+ * STM32F407VET6 on Opulo Lumen PnP Rev5
  * Website - https://opulo.io/
  */
 
@@ -38,24 +38,8 @@
   #define STEP_TIMER 1
 #endif
 
-/**
- * By default, the extra stepper motor configuration is:
- * I = Left Head
- * J = Right Head
- * K = Auxiliary (Conveyor belt)
- */
-
 #define SRAM_EEPROM_EMULATION
 #define MARLIN_EEPROM_SIZE                0x2000  // 8K
-
-// I2C MCP3426 (16-Bit, 240SPS, dual-channel ADC)
-#define HAS_MCP3426_ADC
-
-//
-// Servos
-//
-//#define SERVO0_PIN                          PB10
-//#define SERVO1_PIN                          PB11
 
 //
 // Limit Switches
@@ -64,18 +48,22 @@
 #define Y_STOP_PIN                          PD15
 #define Z_STOP_PIN                          PD14
 
-// None of these require limit switches by default, so we leave these commented
-// here for your reference.
-//#define I_MIN_PIN                         PA8
-//#define I_MAX_PIN                         PA8
-//#define J_MIN_PIN                         PD13
-//#define J_MAX_PIN                         PD13
-//#define K_MIN_PIN                         PC9
-//#define K_MAX_PIN                         PC9
+//
+// TMC Diag Pins 
+//
+
+#define X_DIAG_PIN                          PB10
+#define Y_DIAG_PIN                          PB11
+#define Y2_DIAG_PIN                         PC12
+#define Z_DIAG_PIN                          PB5
+#define I_DIAG_PIN                          PC10
+#define J_DIAG_PIN                          PC11
+
 
 //
 // Steppers
 //
+
 #define X_STEP_PIN                          PB15
 #define X_DIR_PIN                           PB14
 #define X_ENABLE_PIN                        PD9
@@ -83,6 +71,10 @@
 #define Y_STEP_PIN                          PE15
 #define Y_DIR_PIN                           PE14
 #define Y_ENABLE_PIN                        PB13
+
+#define Y2_STEP_PIN                         PD6
+#define Y2_DIR_PIN                          PD7
+#define Y2_ENABLE_PIN                       PA3
 
 #define Z_STEP_PIN                          PE7
 #define Z_DIR_PIN                           PB1
@@ -96,60 +88,31 @@
 #define J_DIR_PIN                           PE10
 #define J_ENABLE_PIN                        PE13
 
-#define K_STEP_PIN                          PD6
-#define K_DIR_PIN                           PD7
-#define K_ENABLE_PIN                        PA3
+// TMC UART
 
-#if HAS_TMC_SPI
-  /**
-   * Make sure to configure the jumpers on the back side of the Mobo according to
-   * this diagram: https://github.com/MarlinFirmware/Marlin/pull/23851
-   */
-  #error "SPI drivers require a custom jumper configuration, see comment above! Comment out this line to continue."
+#define X_SERIAL_TX_PIN                   PD8
+#define X_SERIAL_RX_PIN        X_SERIAL_TX_PIN
 
-  #if AXIS_HAS_SPI(X)
-    #define X_CS_PIN                        PD8
-  #endif
-  #if AXIS_HAS_SPI(Y)
-    #define Y_CS_PIN                        PB12
-  #endif
-  #if AXIS_HAS_SPI(Z)
-    #define Z_CS_PIN                        PE8
-  #endif
-  #if AXIS_HAS_SPI(I)
-    #define I_CS_PIN                        PC5
-  #endif
-  #if AXIS_HAS_SPI(J)
-    #define J_CS_PIN                        PE12
-  #endif
-  #if AXIS_HAS_SPI(K)
-    #define K_CS_PIN                        PA2
-  #endif
+#define Y_SERIAL_TX_PIN                   PB12
+#define Y_SERIAL_RX_PIN        Y_SERIAL_TX_PIN
 
-#elif HAS_TMC_UART
+#define Y2_SERIAL_TX_PIN                  PA2
+#define Y2_SERIAL_RX_PIN       Y2_SERIAL_TX_PIN
 
-  #define X_SERIAL_TX_PIN                   PD8
-  #define X_SERIAL_RX_PIN        X_SERIAL_TX_PIN
+#define Z_SERIAL_TX_PIN                   PE8
+#define Z_SERIAL_RX_PIN        Z_SERIAL_TX_PIN
 
-  #define Y_SERIAL_TX_PIN                   PB12
-  #define Y_SERIAL_RX_PIN        Y_SERIAL_TX_PIN
+#define I_SERIAL_TX_PIN                   PC5
+#define I_SERIAL_RX_PIN        I_SERIAL_TX_PIN
 
-  #define Z_SERIAL_TX_PIN                   PE8
-  #define Z_SERIAL_RX_PIN        Z_SERIAL_TX_PIN
+#define J_SERIAL_TX_PIN                   PE12
+#define J_SERIAL_RX_PIN        J_SERIAL_TX_PIN
 
-  #define I_SERIAL_TX_PIN                   PC5
-  #define I_SERIAL_RX_PIN        I_SERIAL_TX_PIN
 
-  #define J_SERIAL_TX_PIN                   PE12
-  #define J_SERIAL_RX_PIN        J_SERIAL_TX_PIN
 
-  #define K_SERIAL_TX_PIN                   PA2
-  #define K_SERIAL_RX_PIN        K_SERIAL_TX_PIN
+// Reduce baud rate to improve software serial reliability
+#define TMC_BAUD_RATE                    19200
 
-  // Reduce baud rate to improve software serial reliability
-  #define TMC_BAUD_RATE                    19200
-
-#endif
 
 //
 // Heaters / Fans
