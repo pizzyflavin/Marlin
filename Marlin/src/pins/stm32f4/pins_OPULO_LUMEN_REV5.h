@@ -168,3 +168,26 @@
 
 #define RS485_TX_ENABLE_PIN                 PD11
 #define RS485_RX_ENABLE_PIN                 PD12
+
+
+/*
+
+ID PINS
+
+PD0, PD1, PD2, PD3
+
+// setting input pullup
+
+M42 P43 T2 // PD0
+M42 P44 T2 // PD1
+M42 P45 T2 // PD2
+M42 P46 T2 // PD3
+
+//reading values
+
+M43 P43 // PD0
+M43 P44 // PD1
+M43 P45 // PD2
+M43 P46 // PD3
+
+*/

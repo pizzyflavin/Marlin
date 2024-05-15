@@ -852,7 +852,7 @@
 #endif
 
 #if HAS_DUAL_Y_STEPPERS
-  //#define INVERT_Y2_VS_Y_DIR        // Y2 direction signal is the opposite of Y
+  #define INVERT_Y2_VS_Y_DIR        // Y2 direction signal is the opposite of Y
   //#define Y_DUAL_ENDSTOPS           // Y2 has its own endstop
   #if ENABLED(Y_DUAL_ENDSTOPS)
     #define Y2_USE_ENDSTOP    _YMAX_  // Y2 endstop board plug. Don't forget to enable USE_*_PLUG.
@@ -907,8 +907,8 @@
 
 #define SENSORLESS_BACKOFF_MM  { 5, 5, 0, 0, 0, 0 }  // (linear=mm, rotational=°) Backoff from endstops before sensorless homing
 
-#define HOMING_BUMP_MM      { 0, 0, 2, 2, 2, 5 } // (linear=mm, rotational=°) Backoff from endstops after first bump
-#define HOMING_BUMP_DIVISOR { 2, 2, 4, 4, 4, 2 } // Re-Bump Speed Divisor (Divides the Homing Feedrate)
+#define HOMING_BUMP_MM      { 0, 0, 2, 2, 2 } // (linear=mm, rotational=°) Backoff from endstops after first bump
+#define HOMING_BUMP_DIVISOR { 2, 2, 4, 4, 4 } // Re-Bump Speed Divisor (Divides the Homing Feedrate)
 
 //#define HOMING_BACKOFF_POST_MM { 5, 5, 0, 0, 0, 0 }  // (linear=mm, rotational=°) Backoff from endstops after homing
 
@@ -1177,7 +1177,7 @@
 
 // @section motion
 
-#define AXIS_RELATIVE_MODES { false, false, false, false, false, false }
+#define AXIS_RELATIVE_MODES { false, false, false, false, false }
 
 // Add a Duplicate option for well-separated conjoined nozzles
 //#define MULTI_NOZZLE_DUPLICATION
@@ -2868,7 +2868,7 @@
 
   #if AXIS_IS_TMC_CONFIG(Y)
     #define Y_CURRENT       1000
-    #define Y_CURRENT_HOME  1500
+    #define Y_CURRENT_HOME  Y_CURRENT
     #define Y_MICROSTEPS     64
     #define Y_RSENSE          0.11
     #define Y_CHAIN_POS      -1
@@ -2877,7 +2877,7 @@
   #endif
 
   #if AXIS_IS_TMC_CONFIG(Y2)
-    #define Y2_CURRENT      800
+    #define Y2_CURRENT      Y_CURRENT
     #define Y2_CURRENT_HOME Y2_CURRENT
     #define Y2_MICROSTEPS    Y_MICROSTEPS
     #define Y2_RSENSE         0.11
@@ -3178,7 +3178,7 @@
    * Define your own with:
    * { <off_time[1..15]>, <hysteresis_end[-3..12]>, hysteresis_start[1..8] }
    */
-  #define CHOPPER_TIMING CHOPPER_DEFAULT_12V        // All axes (override below)
+  #define CHOPPER_TIMING CHOPPER_DEFAULT_24V        // All axes (override below)
   //#define CHOPPER_TIMING_X  CHOPPER_TIMING        // For X Axes (override below)
   //#define CHOPPER_TIMING_X2 CHOPPER_TIMING_X
   //#define CHOPPER_TIMING_Y  CHOPPER_TIMING        // For Y Axes (override below)
@@ -3283,8 +3283,8 @@
    * Comment *_STALL_SENSITIVITY to disable sensorless homing for that axis.
    * @section tmc/stallguard
    */
-  #define SENSORLESS_HOMING // StallGuard capable drivers only
-  #define SENSORLESS_STALLGUARD_DELAY 20
+  //#define SENSORLESS_HOMING // StallGuard capable drivers only
+  //#define SENSORLESS_STALLGUARD_DELAY 20
 
   #if EITHER(SENSORLESS_HOMING, SENSORLESS_PROBING)
     // TMC2209: 0...255. TMC2130: -64...63
@@ -3318,7 +3318,7 @@
    *
    * Values from 0..1023, -1 to disable homing phase for that axis.
    */
-   #define TMC_HOME_PHASE { 896, 896, -1 }
+   #define TMC_HOME_PHASE { 896, 896, 896 }
 
   /**
    * Step on both rising and falling edge signals (as with a square wave).
@@ -4088,7 +4088,7 @@
 
 #endif // I2C_POSITION_ENCODERS
 
-/**
+/**d
  * Analog Joystick(s)
  * @section joystick
  */
