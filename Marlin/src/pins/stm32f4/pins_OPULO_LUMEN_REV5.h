@@ -190,4 +190,9 @@ M43 P44 // PD1
 M43 P45 // PD2
 M43 P46 // PD3
 
+consistent settings:
+M906 X1000 Y1000
+M204 T4000
+G0 F60000
+
 */
