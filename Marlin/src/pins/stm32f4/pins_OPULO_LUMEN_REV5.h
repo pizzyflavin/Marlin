@@ -33,10 +33,10 @@
 #define BOARD_INFO_NAME      "LumenPnP Motherboard REV05"
 #define DEFAULT_MACHINE_NAME "LumenPnP"
 
-#if defined(ARDUINO_ARCH_STM32) && !defined(STM32GENERIC)
-  // Variant default conflicts with Servo timer
-  #define STEP_TIMER 1
-#endif
+// #if defined(ARDUINO_ARCH_STM32) && !defined(STM32GENERIC)
+//   // Variant default conflicts with Servo timer
+//   #define STEP_TIMER 1
+// #endif
 
 #define SRAM_EEPROM_EMULATION
 #define MARLIN_EEPROM_SIZE                0x2000  // 8K
@@ -122,7 +122,7 @@
 #define FAN2_PIN                            PE5
 #define FAN3_PIN                            PE6
 
-#define FAN_SOFT_PWM_REQUIRED
+//#define FAN_SOFT_PWM_REQUIRED
 
 #define BEEPER_PIN                          PB10
 
@@ -154,12 +154,12 @@
  * in other places and to make sure someone doesn't have to go look up the pinout
  * in the board files. The 8 pin aux port has this pinout:
  *
- *               _________
- *        3.3V  |  1   2  |  GND
- *         PA5  |  3   4  |  PC0
- *         PA6  |  5   6  |  SCL  (I2C_SCL_PIN)
- *        PA15  |  7   8  |  SDA  (I2C_SDA_PIN)
- *               ---------
+ *                               _________
+ *                        3.3V  |  1   2  |  GND
+ *      (LUMEN_AUX_PWM1)   PA5  |  3   4  |  PC0  (LUMEN_AUX_A1)
+ *      (LUMEN_AUX_PWM2)   PA6  |  5   6  |  SCL  (I2C_SCL_PIN)
+ *      (LUMEN_AUX_PWM3)  PA15  |  7   8  |  SDA  (I2C_SDA_PIN)
+ *                               ---------
  */
 #define LUMEN_AUX_PWM1                     PA5
 #define LUMEN_AUX_PWM2                     PA6
@@ -178,17 +178,31 @@ PD0, PD1, PD2, PD3
 
 // setting input pullup
 
-M42 P43 T2 // PD0
-M42 P44 T2 // PD1
-M42 P45 T2 // PD2
-M42 P46 T2 // PD3
+M42 P15 T2 // PD0
+M42 P14 T2 // PD1
+M42 P13 T2 // PD2
+M42 P12 T2 // PD3
 
-//reading values
+// reading values
 
 M43 P43 // PD0
 M43 P44 // PD1
 M43 P45 // PD2
 M43 P46 // PD3
+
+// aux pin set input pullup
+
+M42 I P31 T2  // PD13
+
+//aux pin Write
+
+M42 P31 S255 // PD13
+M42 P31 S0 // PD13
+
+// Aux pin Read
+
+M43 P56
+
 
 consistent settings:
 M906 X1000 Y1000
