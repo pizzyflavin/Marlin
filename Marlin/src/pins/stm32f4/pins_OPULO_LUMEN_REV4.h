@@ -154,7 +154,7 @@
 #define FAN2_PIN                            PE4
 #define FAN3_PIN                            PE5
 
-#define FAN_SOFT_PWM_REQUIRED
+//#define FAN_SOFT_PWM_REQUIRED
 
 //
 // Neopixel

@@ -1,5 +1,4 @@
 /*
-the following line sets PA15 to input pulldown
 
 Ok, our definitions:
 Aux port 3
@@ -14,7 +13,6 @@ M42 P3 S[0-255]
 
 Enable control:
 M42 P2 S[0-255]
-
 
 */
 /**
