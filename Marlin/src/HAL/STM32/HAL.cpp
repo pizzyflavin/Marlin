@@ -102,14 +102,23 @@ void MarlinHAL::init() {
     WRITE(USB_CONNECT_PIN, USB_CONNECT_INVERTING);
   #endif
 
-  // HP45 Encoder Output Configuration
+  // HP45 Encoder Output Configuration (ACTIVE HIGH)
   GPIO_InitTypeDef GPIO_InitStruct = { 0 };
+
   GPIO_InitStruct.Pin = HP45_ENCODER_PIN_MASK;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(HP45_ENCODER_PORT, &GPIO_InitStruct);
   HAL_GPIO_WritePin(HP45_ENCODER_PORT, HP45_ENCODER_PIN_MASK, GPIO_PIN_RESET);
+
+  // HP45 Enable Output Configuration (ACTIVE LOW)
+  GPIO_InitStruct.Pin = HP45_ENABLE_PIN_MASK;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(HP45_ENABLE_PORT, &GPIO_InitStruct);
+  HAL_GPIO_WritePin(HP45_ENABLE_PORT, HP45_ENABLE_PIN_MASK, GPIO_PIN_SET);
 }
 
 // HAL idle task

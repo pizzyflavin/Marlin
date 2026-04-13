@@ -211,14 +211,18 @@
  *  An encoder-like position-sync output is required, as well as an active-LOW enable signal
  */
 
-// Inkjet Controller Emulated Encoder Output (PC0)
 #define HP45_INKJET
 
-#if defined(HP45_INKJET)
+#if ENABLED(HP45_INKJET)
+  // Inkjet Controller Emulated Encoder Output (PC0)
   #define HP45_ENCODER_PORT       (GPIOC)
   #define HP45_ENCODER_PIN_MASK   (1 << 0)
   #define HP45_STEPS_PER_DOT_NUM  (135467)
   #define HP45_STEPS_PER_DOT_DEN  (10000UL)
+
+  // Inkjet Controller Enable Output (PC1)
+  #define HP45_ENABLE_PORT        (GPIOC)
+  #define HP45_ENABLE_PIN_MASK    (1 << 1)
 #endif
 
 // @section extruder
