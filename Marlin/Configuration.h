@@ -69,7 +69,7 @@
 
 // Choose the name from boards.h that matches your setup
 #ifndef MOTHERBOARD
-  #define MOTHERBOARD BOARD_OPULO_LUMEN_REV4
+  #define MOTHERBOARD BOARD_OPULO_LUMEN_REV5
 #endif
 
 /**
@@ -81,6 +81,7 @@
  * :[-1, 0, 1, 2, 3, 4, 5, 6, 7]
  */
 #define SERIAL_PORT -1
+
 
 /**
  * Serial Port Baud Rate
@@ -144,13 +145,13 @@
 #define Y_DRIVER_TYPE  TMC2209
 #define Z_DRIVER_TYPE  TMC2209
 //#define X2_DRIVER_TYPE A4988
-//#define Y2_DRIVER_TYPE A4988
+#define Y2_DRIVER_TYPE TMC2209
 //#define Z2_DRIVER_TYPE A4988
 //#define Z3_DRIVER_TYPE A4988
 //#define Z4_DRIVER_TYPE A4988
 #define I_DRIVER_TYPE  TMC2209
 #define J_DRIVER_TYPE  TMC2209
-#define K_DRIVER_TYPE  TMC2209
+//#define K_DRIVER_TYPE  TMC2209
 //#define U_DRIVER_TYPE  A4988
 //#define V_DRIVER_TYPE  A4988
 //#define W_DRIVER_TYPE  A4988
@@ -215,14 +216,14 @@
 
 #if ENABLED(HP45_INKJET)
   // Inkjet Controller Emulated Encoder Output (PC0)
-  #define HP45_ENCODER_PORT       (GPIOC)
-  #define HP45_ENCODER_PIN_MASK   (1 << 0)
+  #define HP45_ENCODER_PORT       (GPIOA)
+  #define HP45_ENCODER_PIN_MASK   (1 << 15)
   #define HP45_STEPS_PER_DOT_NUM  (135467)
   #define HP45_STEPS_PER_DOT_DEN  (10000UL)
 
   // Inkjet Controller Enable Output (PC1)
-  #define HP45_ENABLE_PORT        (GPIOC)
-  #define HP45_ENABLE_PIN_MASK    (1 << 1)
+  #define HP45_ENABLE_PORT        (GPIOA)
+  #define HP45_ENABLE_PIN_MASK    (1 << 6)
 #endif
 
 // @section extruder
@@ -1171,11 +1172,11 @@
  * Endstop "Hit" State
  * Set to the state (HIGH or LOW) that applies to each endstop.
  */
-#define X_MIN_ENDSTOP_HIT_STATE HIGH
+#define X_MIN_ENDSTOP_HIT_STATE LOW
 #define X_MAX_ENDSTOP_HIT_STATE HIGH
-#define Y_MIN_ENDSTOP_HIT_STATE HIGH
+#define Y_MIN_ENDSTOP_HIT_STATE LOW
 #define Y_MAX_ENDSTOP_HIT_STATE HIGH
-#define Z_MIN_ENDSTOP_HIT_STATE LOW
+#define Z_MIN_ENDSTOP_HIT_STATE HIGH
 #define Z_MAX_ENDSTOP_HIT_STATE HIGH
 #define I_MIN_ENDSTOP_HIT_STATE LOW
 #define I_MAX_ENDSTOP_HIT_STATE HIGH
@@ -1237,14 +1238,14 @@
  * Override with M92
  *                                      X, Y, Z [, I [, J [, K...]]], E0 [, E1[, E2...]]
  */
-#define DEFAULT_AXIS_STEPS_PER_UNIT   { 320, 320, 40, 4.44, 4.44, 40 }
+#define DEFAULT_AXIS_STEPS_PER_UNIT   { 320, 320, 40, 4.44, 4.44}
 
 /**
  * Default Max Feed Rate (linear=mm/s, rotational=°/s)
  * Override with M203
  *                                      X, Y, Z [, I [, J [, K...]]], E0 [, E1[, E2...]]
  */
-#define DEFAULT_MAX_FEEDRATE          { 1000, 1000, 500, 50000, 50000, 5000 }
+#define DEFAULT_MAX_FEEDRATE          { 1500, 1500, 500, 50000, 50000}
 
 //#define LIMITED_MAX_FR_EDITING        // Limit edit via M203 or LCD to DEFAULT_MAX_FEEDRATE * 2
 #if ENABLED(LIMITED_MAX_FR_EDITING)
@@ -1257,7 +1258,7 @@
  * Override with M201
  *                                      X, Y, Z [, I [, J [, K...]]], E0 [, E1[, E2...]]
  */
-#define DEFAULT_MAX_ACCELERATION      { 2000, 2000, 2000, 3000, 3000, 3000 }
+#define DEFAULT_MAX_ACCELERATION      { 10000, 10000, 10000, 10000, 10000}
 
 //#define LIMITED_MAX_ACCEL_EDITING     // Limit edit via M201 or LCD to DEFAULT_MAX_ACCELERATION * 2
 #if ENABLED(LIMITED_MAX_ACCEL_EDITING)
@@ -1276,7 +1277,7 @@
  */
 #define DEFAULT_ACCELERATION                  2000  // X, Y, Z ... and E acceleration for printing moves
 #define DEFAULT_RETRACT_ACCELERATION          3000  // E acceleration for retracts
-#define DEFAULT_TRAVEL_ACCELERATION           2000  // X, Y, Z ... acceleration for travel (non printing) moves
+#define DEFAULT_TRAVEL_ACCELERATION           2500  // X, Y, Z ... acceleration for travel (non printing) moves
 #if ENABLED(AXIS4_ROTATES)
   #define DEFAULT_ANGULAR_ACCELERATION        3000  // I, J, K acceleration for rotational-only printing moves
   #define DEFAULT_ANGULAR_TRAVEL_ACCELERATION 3000  // I, J, K acceleration for rotational-only travel (non printing) moves
@@ -2252,7 +2253,7 @@
 #endif
 
 // Homing speeds (linear=mm/min, rotational=°/min)
-#define HOMING_FEEDRATE_MM_M { (200*60), (200*60), (50*60), (50*60), (50*60), (50*60) }
+#define HOMING_FEEDRATE_MM_M { (150*60), (150*60), (150*60), (50*60), (50*60) }
 
 // Validate that endstops are triggered on homing moves
 #define VALIDATE_HOMING_ENDSTOPS
@@ -3400,7 +3401,7 @@
 // Use software PWM to drive the fan, as for the heaters. This uses a very low frequency
 // which is not as annoying as with the hardware PWM. On the other hand, if this frequency
 // is too low, you should also increment SOFT_PWM_SCALE.
-#define FAN_SOFT_PWM
+//#define FAN_SOFT_PWM
 
 // Incrementing this by 1 will double the software PWM frequency,
 // affecting heaters, and the fan if FAN_SOFT_PWM is enabled.
