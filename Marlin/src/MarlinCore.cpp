@@ -1270,6 +1270,20 @@ void setup() {
     SETUP_RUN(tmc_init_cs_pins());
   #endif
 
+  // Interlock I/O setup
+  #if PIN_EXISTS(DOOR_SOLENOID)
+    OUT_WRITE(DOOR_SOLENOID_PIN, LOW); // Active High
+  #endif
+
+  #if PIN_EXISTS(DOOR_STATE)
+    SET_INPUT_PULLDOWN(DOOR_STATE_PIN); // Active High
+  #endif
+
+  #if PIN_EXISTS(DOOR_LOCK_STATE)
+    SET_INPUT_PULLDOWN(DOOR_LOCK_STATE_PIN); // Active High
+  #endif
+
+  // Pneumatics I/O setup
   #if PIN_EXISTS(PNEUM_RELAY)
     OUT_WRITE(PNEUM_RELAY_PIN, LOW); // Active High
   #endif
