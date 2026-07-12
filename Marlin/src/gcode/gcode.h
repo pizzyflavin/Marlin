@@ -166,6 +166,8 @@
  * M128 - EtoP Open. (Requires BARICUDA)
  * M129 - EtoP Closed. (Requires BARICUDA)
  *
+ * M131 - Send enable signal to HP45 controller: M131
+ *
  * M140 - Set bed target temp. S<temp>
  * M141 - Set heated chamber target temp. S<temp> (Requires a chamber heater)
  * M143 - Set cooler target temp. S<temp> (Requires a laser cooling device)
@@ -775,6 +777,10 @@ private:
       static void M128();
       static void M129();
     #endif
+  #endif
+
+  #if ENABLED(HP45_INKJET)
+    static void M131();
   #endif
 
   #if HAS_HEATED_BED

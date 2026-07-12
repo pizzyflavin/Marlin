@@ -81,6 +81,8 @@
 
 Stepper stepper; // Singleton
 
+static uint32_t hp45_enc_accum = 0;
+
 #define BABYSTEPPING_EXTRA_DIR_WAIT
 
 #ifdef __AVR__
@@ -1732,6 +1734,8 @@ void Stepper::isr() {
  */
 void Stepper::pulse_phase_isr() {
 
+  HP45_ENCODER_PORT->BSRR = HP45_ENCODER_PIN_MASK << 16;
+
   // If we must abort the current block, do so!
   if (abort_current_block) {
     abort_current_block = false;
@@ -2024,6 +2028,7 @@ void Stepper::pulse_phase_isr() {
     // Pulse start
     #if HAS_X_STEP
       PULSE_START(X);
+      bool hp45_x_step = step_needed.test(_AXIS(X));
     #endif
     #if HAS_Y_STEP
       PULSE_START(Y);
@@ -2070,6 +2075,13 @@ void Stepper::pulse_phase_isr() {
     // Pulse stop
     #if HAS_X_STEP
       PULSE_STOP(X);
+      if (hp45_x_step) {
+        hp45_enc_accum += HP45_STEPS_PER_DOT_DEN;
+        if (hp45_enc_accum >= HP45_STEPS_PER_DOT_NUM) {
+          hp45_enc_accum -= HP45_STEPS_PER_DOT_NUM;
+          HP45_ENCODER_PORT->BSRR = HP45_ENCODER_PIN_MASK;
+        }
+      }
     #endif
     #if HAS_Y_STEP
       PULSE_STOP(Y);
