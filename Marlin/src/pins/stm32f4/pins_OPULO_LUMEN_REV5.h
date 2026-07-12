@@ -49,7 +49,7 @@
 #define Z_STOP_PIN                          PD14
 
 //
-// TMC Diag Pins 
+// TMC Diag Pins
 //
 
 #define X_DIAG_PIN                          PB10
@@ -115,12 +115,14 @@
 
 
 //
-// Heaters / Fans
+// Heaters / Fans / DigIO
 //
 #define FAN0_PIN                            PB8
 #define FAN1_PIN                            PB9
 #define FAN2_PIN                            PE5
 #define FAN3_PIN                            PE6
+
+#define PNEUM_RELAY_PIN                     PE2
 
 //#define FAN_SOFT_PWM_REQUIRED
 
