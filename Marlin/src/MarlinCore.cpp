@@ -1270,6 +1270,10 @@ void setup() {
     SETUP_RUN(tmc_init_cs_pins());
   #endif
 
+  #if PIN_EXISTS(PNEUM_RELAY)
+    OUT_WRITE(PNEUM_RELAY_PIN, LOW); // Active High
+  #endif
+
   #if ENABLED(PSU_CONTROL)
     SETUP_LOG("PSU_CONTROL");
     powerManager.init();
