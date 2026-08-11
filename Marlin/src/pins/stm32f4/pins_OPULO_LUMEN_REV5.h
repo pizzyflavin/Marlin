@@ -119,10 +119,13 @@
 //
 #define FAN0_PIN                            PB8
 #define FAN1_PIN                            PB9
-#define FAN2_PIN                            PE5
+//#define FAN2_PIN                          PE5
 #define FAN3_PIN                            PE6
 
 #define PNEUM_RELAY_PIN                     PE2
+#define DOOR_SOLENOID_PIN                   PE5
+#define DOOR_STATE_PIN                      PA5
+#define DOOR_LOCK_STATE_PIN                 PC0
 
 //#define FAN_SOFT_PWM_REQUIRED
 
@@ -163,10 +166,10 @@
  *      (LUMEN_AUX_PWM3)  PA15  |  7   8  |  SDA  (I2C_SDA_PIN)
  *                               ---------
  */
-#define LUMEN_AUX_PWM1                     PA5
-#define LUMEN_AUX_PWM2                     PA6
-#define LUMEN_AUX_PWM3                     PA15
-#define LUMEN_AUX_A1                       PC0
+//#define LUMEN_AUX_PWM1                     PA5
+//#define LUMEN_AUX_PWM2                     PA6
+//#define LUMEN_AUX_PWM3                     PA15
+//#define LUMEN_AUX_A1                       PC0
 
 #define RS485_TX_ENABLE_PIN                 PD11
 #define RS485_RX_ENABLE_PIN                 PD12
