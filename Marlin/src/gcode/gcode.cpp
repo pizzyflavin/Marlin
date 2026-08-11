@@ -688,6 +688,10 @@ void GcodeSuite::process_parsed_command(const bool no_ok/*=false*/) {
         case 131: M131(); break;
       #endif
 
+      #if PIN_EXISTS(DOOR_SOLENOID)
+        case 132: M132(); break;                                  // M132: Set door solenoid output state
+      #endif
+
       #if HAS_PREHEAT
         case 145: M145(); break;                                  // M145: Set material heatup parameters
       #endif

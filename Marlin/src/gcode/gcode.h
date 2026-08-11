@@ -167,6 +167,7 @@
  * M129 - EtoP Closed. (Requires BARICUDA)
  *
  * M131 - Send enable signal to HP45 controller: M131
+ * M132 - Set door solenoid output state. S<bool> (Requires DOOR_SOLENOID_PIN)
  *
  * M140 - Set bed target temp. S<temp>
  * M141 - Set heated chamber target temp. S<temp> (Requires a chamber heater)
@@ -781,6 +782,10 @@ private:
 
   #if ENABLED(HP45_INKJET)
     static void M131();
+  #endif
+
+  #if PIN_EXISTS(DOOR_SOLENOID)
+    static void M132();
   #endif
 
   #if HAS_HEATED_BED
